@@ -1,0 +1,17 @@
+Package: act
+Type: Package
+Title: Arthur Couturier Thesis
+Version: 1.0.0
+Author: Couturier Arthur
+Maintainer: Couturier Arthur <arthur.couturier@inrae.fr>
+Description: Diverse functions used during my thesis,
+    the main function is the graph function and some functions are made to improve the graph function.
+    Other functions are tools for data improvement.
+License: CC0
+Encoding: UTF-8
+LazyData: true
+Imports: Rmisc, pals, graphics, stats, grDevices, ggplot2, car,
+        agricolae, multcomp, png, rsm
+RoxygenNote: 7.1.0
+NeedsCompilation: no
+Packaged: 2020-05-10 00:13:02 UTC; Arthur
