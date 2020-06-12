@@ -52,8 +52,14 @@ graph <- function(x, y, z, data, LoopSize = 3,
                      hist = FALSE,
                      x2 = NULL, y2 = NULL, xlim2 = TRUE, ylim2 = TRUE,
                      path = NULL) {
+  if (exists("opt", envir = .GlobalEnv)) {
+    opt <- get("opt", envir = .GlobalEnv)
+  } else {
+    opt <- list(ann = ann, pal = palette, res = 600, png_output = FALSE, plot_size = 4)
+  }
+  
   palette_backup <- palette()  # Sauvegarde la palette graphique utilisee avant la fonction
-
+  
   # Modification des donnes ----
   data <- data[order(data[, 1], data[, 2], data[, 3]), ]
   data <- data[order(data[, x], decreasing = T), ]
