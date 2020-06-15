@@ -14,7 +14,7 @@
 #'
 #' @importFrom stats nls lm
 #' @import graphics
-regression <- function(df, x, y, type, intercept = NULL, output = 1, filename = paste0("regression_", Sys.Date(), ".csv"), ann.pos = "right") {
+regression <- function(df, x, y, type, intercept = NULL, output = 1, filename = paste0("regression_", Sys.Date(), ".csv"), print.ann = T, ann.pos = "right", col = "grey50") {
   if (output %in% c(1:3)  ==  FALSE) {
     warning("'output' must be 1, 2 or 3. 1 draws a regression onto the current plot. 2 writes the regression parameters in a data frame. 3 do both.\n")
   }
@@ -42,10 +42,10 @@ regression <- function(df, x, y, type, intercept = NULL, output = 1, filename = 
     if (is.numeric(intercept)) {
       modele <- lm(I(df[, y] - intercept) ~ poly(df[, x], type, raw = T) - 1)
     } else {
-      modele <- lm(df[, y] ~ poly(df[, x], type, raw = T))
+      modele <- lm(df[, y] ~ poly(df[, x], type, raw = !inherits(df[, x], "POSIXct")))
     }
     coef <- na.omit(c(intercept, coef(modele)))
-    if (length(output[output == "plot"]) > 0) lines(df[, x], predict(modele) + if (is.numeric(intercept)) intercept else 0, lwd = 3, col = "grey50")
+    if (length(output[output == "plot"]) > 0) lines(df[, x], predict(modele) + if (is.numeric(intercept)) intercept else 0, lwd = 3, col = col)
   }
 
   #Output
@@ -79,8 +79,10 @@ regression <- function(df, x, y, type, intercept = NULL, output = 1, filename = 
       r_square <- substitute(paste(R^2, " = ", rsquare, " "), list(rsquare = round(cor(df[, y], predict(modele))^2, 3)))
 
       options(warn = -1)
-      text(x = x_pos, y = y_pos + (par("usr")[4] - par("usr")[3]) * 0.05, labels = r_square, adj = adj_pos, xpd = NA)
-      text(x = x_pos, y = y_pos - (y_pos - par("usr")[3]) * 0.05, labels = equation, adj = adj_pos, xpd = NA)
+      if (print.ann) {
+        text(x = x_pos, y = y_pos + (par("usr")[4] - par("usr")[3]) * 0.05, labels = r_square, adj = adj_pos, col = col, xpd = NA)
+        text(x = x_pos, y = y_pos - (y_pos - par("usr")[3]) * 0.05, labels = equation, adj = adj_pos, col = col, xpd = NA)
+      }
       options(warn = -1)
     }
 
