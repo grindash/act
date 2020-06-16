@@ -4,9 +4,9 @@
 #'
 #' @return open a png file, must be closed afterward
 #' @export
-make_output <- function(file) {
-  if (exists("opt", envir = .GlobalEnv)) {
-    opt <- get("opt", envir = .GlobalEnv)
+make_output <- function(file, envir = .GlobalEnv) {
+  if (exists("opt", envir = envir)) {
+    opt <- get("opt", envir = envir)
   } else {
     opt <- list(ann = TRUE, pal = 2, res = 600, png_output = TRUE, plot_size = 4)
   }
