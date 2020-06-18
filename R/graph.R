@@ -39,8 +39,6 @@
 #' @import grDevices
 #' @import graphics
 #' @import stats
-#' @examples data(CO2)
-#' @examples graph("conc", "uptake", "Type", CO2, 1, Mean = TRUE, ErrorBar = TRUE)
 graph <- function(x, y, z, data, LoopSize = 3,
                      mfrow = NULL, i = 1,
                      type = "p", palette = 2, title = NULL,
@@ -212,7 +210,7 @@ graph <- function(x, y, z, data, LoopSize = 3,
 
       #Regression
       if (reg !=  F) {
-        if (typeof(path) == "character") {
+        if (typeof(path) != "NULL") {
           filename <- file.path(if (class(try(dirname(path), T)) !=  "try-error") {dirname(path)} else {getwd()}, paste0(y, "~", x, ".csv"))
           if (is.numeric(reg)) nb.coef <- reg + 1 else nb.coef <- 2
           if (cond == 1) capture.output(cat(paste0(paste(colnames(conditions), collapse = ";"), ";x;y;correlation;", paste(letters[1:nb.coef], collapse = ";"), "\n")), file = filename, append = T)
@@ -220,9 +218,10 @@ graph <- function(x, y, z, data, LoopSize = 3,
           output.reg <- 3
         } else output.reg <- 1
         act::regression(df, x, y, type = reg, intercept = reg.itc, output = output.reg, filename = filename, ann.pos = reg_pos)
+        if (cond == nrow(conditions)) cat(paste("\tRegression data saved at", filename))
 
         if (length(y2) > 0) {
-          if (typeof(path) == "character") {
+          if (typeof(path) != "NULL") {
             filename <- file.path(if (class(try(dirname(path), T)) !=  "try-error") {dirname(path)} else {getwd()}, paste0(y2, "~", x, ".csv"))
             if (is.numeric(reg)) nb.coef <- reg + 1 else nb.coef <- 2
             if (cond == 1) capture.output(cat(paste0(paste(colnames(conditions), collapse = ";"), ";x;y;correlation;", paste(letters[1:nb.coef], collapse = ";"), "\n")), file = filename, append = T)
