@@ -13,8 +13,9 @@
 #' @examples uptake_mean <- data.frame()
 #' @examples for (i in 1:nrow(ut)) {uptake_mean <- rbind(uptake_mean, Rmisc::group.CI(uptake ~ Plant, act_call(CO2, ut, i)))}
 act_call <- function(data, unique_table, scenario_nb, rt="df") {
+  if (is.null(colnames(unique_table))) stop("no column in unique_table, you should use df[, col, drop = F]")
   call <- NULL
-  for (col in seq_len(ncol(unique_table))) call <- paste(call, data[, colnames(unique_table)[col]] %in% unique_table[scenario_nb, col], sep = " & ")
+  for (col in colnames(unique_table)) call <- paste(call, data[, col] %in% unique_table[scenario_nb, col], sep = " & ")
   # call <- sapply(colnames(unique_table), function(x) {paste(data[, x]%in%unique_table[scenario_nb, x], sep=" & ")})
   # call <- apply(call[, colnames(call)], 1, paste, collapse = " & " )
 

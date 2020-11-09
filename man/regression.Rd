@@ -12,7 +12,9 @@ regression(
   intercept = NULL,
   output = 1,
   filename = paste0("regression_", Sys.Date(), ".csv"),
-  ann.pos = "right"
+  print.ann = T,
+  ann.pos = "right",
+  col = "grey50"
 )
 }
 \arguments{
@@ -30,7 +32,11 @@ regression(
 
 \item{filename}{output filename. csv format by default}
 
+\item{print.ann}{logical. add regression equation and r square on the plot}
+
 \item{ann.pos}{equation position}
+
+\item{col}{line color}
 }
 \value{
 draw a curve on a pre-existing plot

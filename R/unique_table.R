@@ -8,7 +8,9 @@
 #'
 #' @examples data("CO2")
 #' @examples unique_table(CO2, c(1:3))
-unique_table <- function(data, factors){
+unique_table <- function(data, factors="all"){
+  data <- data.frame(data)
+  if (factors == "all") factors <- colnames(data)
   if (typeof(factors) == "double") factors <- colnames(data)[factors]
   table <- data.frame(unique(data[, factors]))
 

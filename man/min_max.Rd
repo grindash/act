@@ -4,7 +4,7 @@
 \alias{min_max}
 \title{Combine min and max functions}
 \usage{
-min_max(data)
+min_max(data, which = F)
 }
 \arguments{
 \item{data}{data frame}

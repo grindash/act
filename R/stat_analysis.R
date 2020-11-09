@@ -31,12 +31,13 @@ stat_analysis <- function(data, Y, factors, sep = NULL, test = c(1:4), mfrow = N
     if (length(grep(2, test)) > 0) {
       test <- test[grep(2, test, invert = T)]
       warning_txt <- paste(warning_txt, "TukeyHSD cannot be performed.")
+      warning(warning_txt)
     }
     if (length(grep(4, test)) > 0) {
       test <- test[grep(4, test, invert = T)]
       warning_txt <- paste(warning_txt, "ANOVA2 cannot be performed.")
+      warning(warning_txt)
     }
-    warning(warning_txt)
   }
   data[factors] <- lapply(data[factors], as.factor)
   list_sep <- act::unique_table(data, sep)

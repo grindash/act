@@ -6,7 +6,6 @@
 #' @param y Second factor
 #' @param z Variable
 #' @param method "contour" and / or "persp", Default is both.
-#' @param xlim plot xlim
 #' @param col_pal color palette
 #'
 #' @return RSM plot
@@ -17,8 +16,7 @@
 #' @examples data("iris")
 #' @examples par(mfrow = c(1, 2))
 #' @examples rsm_plot(iris, "Sepal.Length", "Sepal.Width", "Petal.Length")
-rsm_plot <- function(data, x, y, z, xlim, method = c("contour", "persp"),
-                     col_pal = colorRampPalette(c("#660000", "#ff0000"))(8)) {
+rsm_plot <- function(data, x, y, z, method = c("contour", "persp"), col_pal = colorRampPalette(c("#660000", "#ff0000"))(8)) {
   #Model
   data <- na.omit(data[, c(x, y, z)])
   colnames(data) <- c("x", "y", "z")
@@ -31,6 +29,7 @@ rsm_plot <- function(data, x, y, z, xlim, method = c("contour", "persp"),
       assign(paste0(col, "_lab"), round(seq(0, max(data[, col]), max(data[, col]) / 10), 2))
     }
   }
+  model <- rsm::rsm(z ~ SO(x, y), data=data)
 
   #RSM Plot
   if (length(grep("contour", method)) > 0) {

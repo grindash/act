@@ -6,12 +6,17 @@
 #' @return c(nrow,ncol)
 #' @export
 act_mfrow <- function(df, col="all") {
-  df <- as.data.frame(df)
-  if (col == "all") col <- 1:ncol(df)
-  if (length(col) == 1) {
-    mfrow <- c(round(sqrt(length(unique(df[, col])))), ceiling(sqrt(length(unique(df[, col])))))
-  }else{
-    mfrow <- c(round(sqrt(nrow(unique(df[, col])))), ceiling(sqrt(nrow(unique(df[, col])))))
+  if (length(df) == 1) {
+    if (df == 3) mfrow <- c(1, 3) else mfrow <- c(round(sqrt(df)), ceiling(sqrt(df)))
+  } else {
+    df <- as.data.frame(df)
+    if (length(col) == 1) {
+      if (col == "all") col <- 1:ncol(df)
+      nb <- length(unique(df[, col]))
+    }else{
+      nb <- nrow(unique(df[, col]))
+    }
+    if (nb == 3) mfrow <- c(1, 3) else mfrow <- c(round(sqrt(nb)), ceiling(sqrt(nb)))
   }
   return(mfrow)
 }

@@ -4,7 +4,7 @@
 \alias{unique_table}
 \title{Create an ordered dataframe with all unique combination of a data set}
 \usage{
-unique_table(data, factors)
+unique_table(data, factors = "all")
 }
 \arguments{
 \item{data}{data frame}

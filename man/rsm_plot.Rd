@@ -10,7 +10,6 @@ rsm_plot(
   x,
   y,
   z,
-  xlim,
   method = c("contour", "persp"),
   col_pal = colorRampPalette(c("#660000", "#ff0000"))(8)
 )
@@ -23,8 +22,6 @@ rsm_plot(
 \item{y}{Second factor}
 
 \item{z}{Variable}
-
-\item{xlim}{plot xlim}
 
 \item{method}{"contour" and / or "persp", Default is both.}
 

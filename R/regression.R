@@ -8,6 +8,8 @@
 #' @param output 1 draws a regression onto the current plot. 2 writes the regression parameters in a data frame. 3 do both.
 #' @param filename output filename. csv format by default
 #' @param ann.pos equation position
+#' @param print.ann logical. add regression equation and r square on the plot
+#' @param col line color
 #'
 #' @return draw a curve on a pre-existing plot
 #' @export
@@ -88,9 +90,10 @@ regression <- function(df, x, y, type, intercept = NULL, output = 1, filename = 
 
     #Equation saved in data frame
     if (length(output[output == "table"]) > 0) {
-      output_model <- paste(x, y, round(cor(df[, y], predict(modele))^2, 3), sep = ";")
+      if (!file.exists(filename)) capture.output(cat(paste0("x;y;correlation;", paste(letters[1:length(coef)], collapse = ";"), "\n")), file = filename)
+      output_model <- paste(x, y, cor(df[, y], predict(modele))^2, sep = ";")
       for (i in rev(seq_len(length(coef)))) {
-        output_model <- paste(output_model, paste(round(coef[i], 2), collapse = ";"), sep = ";")
+        output_model <- paste(output_model, paste(coef[i], collapse = ";"), sep = ";")
       }
       capture.output(cat(output_model, "\n"), file = filename, append = T)
     }

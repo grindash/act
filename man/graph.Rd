@@ -14,7 +14,7 @@ graph(
   i = 1,
   type = "p",
   palette = 2,
-  title = NULL,
+  main = NULL,
   xlab = NULL,
   ylab = NULL,
   xlim = TRUE,
@@ -24,19 +24,23 @@ graph(
   lg.lab = "",
   lg.pos = "bottomright",
   lg.nb = c(1:1000),
-  Mean = FALSE,
-  Interval = FALSE,
-  ErrorBar = FALSE,
+  mean = FALSE,
+  interval = FALSE,
+  errorbar = FALSE,
   reg = FALSE,
   reg.itc = NULL,
+  reg_col = "black",
   reg_pos = "left",
   reg_pos2 = "right",
   hist = FALSE,
+  eq = NULL,
+  rrmse = F,
   x2 = NULL,
   y2 = NULL,
   xlim2 = TRUE,
   ylim2 = TRUE,
-  path = NULL
+  path = FALSE,
+  mult_dev = FALSE
 )
 }
 \arguments{
@@ -44,11 +48,9 @@ graph(
 
 \item{y}{character. set of data to draw}
 
-\item{z}{character. set of data to draw}
+\item{z}{character. set of data to draw. Can be NA}
 
 \item{data}{data frame. First three columns must be the factors parameters.}
-
-\item{LoopSize}{number of factor}
 
 \item{mfrow}{plot number by graphical window. c(ncol, nrow)}
 
@@ -57,8 +59,6 @@ graph(
 \item{type}{what type of plot should be drawn. Default is points}
 
 \item{palette}{1 = black and white palette, 2 = color palette. Other palette are accepted if fully detailed : palette(new.palette)}
-
-\item{title}{plot title}
 
 \item{xlab}{a title for the x axis}
 
@@ -78,21 +78,27 @@ graph(
 
 \item{lg.nb}{numeric. plot number where the legend should be displayed. Default is on all plots.}
 
-\item{Mean}{logical. If TRUE the mean of the y is used instead of raw value.}
+\item{mean}{logical. If TRUE the mean of the y is used instead of raw value.}
 
-\item{Interval}{logical. If TRUE display the confidence interval of the y mean}
+\item{interval}{logical. If TRUE display the confidence interval of the y mean}
 
-\item{ErrorBar}{logical. If TRUE display the error bar of the y mean}
+\item{errorbar}{logical. If TRUE display the error bar of the y mean}
 
 \item{reg}{Draw the linear regression of the plot. If "nls" or "lm" return a second order regression. If numeric, return a regression from the specified order, using the lm function.}
 
 \item{reg.itc}{numeric. Force the intercept of the regression}
+
+\item{reg_col}{regression color}
 
 \item{reg_pos}{regression position on the plot}
 
 \item{reg_pos2}{regression position on the plot}
 
 \item{hist}{logical. If TRUE display the distribution of the data.}
+
+\item{eq}{Print an equation on the plot from equation coefficients. Format is "c(coef_1 = a, coef_2=b, ...)"}
+
+\item{rrmse}{Print rRMSE value on the plot.}
 
 \item{x2}{second set of data to draw on the same plot}
 
@@ -103,14 +109,16 @@ graph(
 \item{ylim2}{plot parameter of the second data set}
 
 \item{path}{Path where the plot are saved as png. If empty open a new window instead.}
+
+\item{mult_dev}{Separate the plot into multiple graphic panel for each unique factor 1.}
+
+\item{loopsize}{number of factor}
+
+\item{title}{plot title}
 }
 \value{
 a list of plot
 }
 \description{
 Plot following Annals of Botany rules
-}
-\examples{
-data(CO2)
-graph("conc", "uptake", "Type", CO2, 1, Mean = TRUE, ErrorBar = TRUE)
 }

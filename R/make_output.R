@@ -1,10 +1,13 @@
 #' Create png with predetermined options
 #'
 #' @param file file name output
+#' @param envir environment to grab opt
+#' @param screen_ratio change the screen ratio, default is 1:1
 #'
 #' @return open a png file, must be closed afterward
 #' @export
-make_output <- function(file, envir = .GlobalEnv) {
+make_output <- function(file, envir = .GlobalEnv, screen_ratio = "1:1") {
+  screen_ratio <- eval(parse(text = gsub(":", "/", screen_ratio)))
   if (exists("opt", envir = envir)) {
     opt <- get("opt", envir = envir)
   } else {
@@ -23,8 +26,8 @@ make_output <- function(file, envir = .GlobalEnv) {
 
   if (opt$png_output) {
     if (dirname(file) != ".") dir.create(file.path(dirname(file)), showWarnings = F, recursive = T) # Create folder if non existing
-    if (par("mfrow")[1] * par("mfrow")[2] <= 2) png(file, 800 * par("mfrow")[2], 800 * par("mfrow")[1], res = 100)
-    if (par("mfrow")[1] * par("mfrow")[2] > 2) png(file, opt$plot_size * par("mfrow")[2], opt$plot_size * par("mfrow")[1], "in", res = opt$res)
+    if (par("mfrow")[1] * par("mfrow")[2] <= 2) png(file, screen_ratio * 800 * par("mfrow")[2], 800 * par("mfrow")[1], res = 100)
+    if (par("mfrow")[1] * par("mfrow")[2] > 2) png(file, screen_ratio * opt$plot_size * par("mfrow")[2], opt$plot_size * par("mfrow")[1], "in", res = opt$res)
     par(par_save)
   } else {
     windows(1920, 1080)

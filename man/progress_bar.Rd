@@ -3,21 +3,25 @@
 \name{progress_bar}
 \alias{progress_bar}
 \title{create a basic progression bar
-May lag if total if really high.}
+May lag if total is really high.}
 \usage{
-progress_bar(i, total)
+progress_bar(i, total, title = "", label = "")
 }
 \arguments{
 \item{i}{iteration}
 
 \item{total}{total number of iteration}
+
+\item{title}{text before the progress bar}
+
+\item{label}{text after the progress bar}
 }
 \value{
 progress bar in console
 }
 \description{
 create a basic progression bar
-May lag if total if really high.
+May lag if total is really high.
 }
 \examples{
 for (i in 1:10) {Sys.sleep(0.1); progress_bar(i, 10)}

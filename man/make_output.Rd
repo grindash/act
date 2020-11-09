@@ -4,10 +4,14 @@
 \alias{make_output}
 \title{Create png with predetermined options}
 \usage{
-make_output(file)
+make_output(file, envir = .GlobalEnv, screen_ratio = "1:1")
 }
 \arguments{
 \item{file}{file name output}
+
+\item{envir}{environment to grab opt}
+
+\item{screen_ratio}{change the screen ratio, default is 1:1}
 }
 \value{
 open a png file, must be closed afterward
