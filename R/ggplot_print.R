@@ -12,7 +12,7 @@ ggplot_print <- function(plot) {
 
   vp <- grid::viewport(height = grid::unit(1 / par("mfrow")[1], "npc"),
                        width = grid::unit(1 / par("mfrow")[2], "npc"),
-                       just= c("right","bottom"),
+                       just = c("right","bottom"),
                        y = 1 - ypos, x = xpos)
 
   print(plot, vp = vp)

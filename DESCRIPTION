@@ -1,17 +1,29 @@
 Package: act
 Type: Package
 Title: Arthur Couturier Thesis
-Version: 1.0.4
+Version: 1.7.2
 Author: Couturier Arthur
 Maintainer: Couturier Arthur <arthur.couturier@inrae.fr>
 Description: Diverse functions used during my thesis,
-    the main function is the graph function and some functions are made to improve the graph function.
+    The main function is the graph function and some functions are made to improve the graph function.
     Other functions are tools for data improvement.
+    1.7.2 passage de graph(x, y, z, data, ...) a graph(data, x, y, z, ...)
+    1.7.1 ajout de la fonction print_legend
+    1.7.0 ajout de la fonction act_boxplot. Amelioration de rsm_plot.
+    1.6.1 Amelioration des fonctions 'legume_import_lsAxes', 'legume_lmax_by_rank' pour gerer de plus larges configurations. Ajout de l'option 'pattern' dans la fonction 'dirname2
+    1.6.0 Correction des bugs de legende de la fonction 'graph' quand 2 variables etait atribuee a 'z'. Amelioration de la fonction 'make_output' quand 1 seul graph. 'find_dir' peut desormais avoir plusieurs valeurs de pattern.
+    1.5.0 Ajout de 'read_caribu'. Modification de 'import_caribu, 'caribu_data', 'caribu_zeta pour le zeta journalier. Amelioration de la fonction 'get_date_format', 'act_mfrow', 'graph'
+    1.4.4 Ajout des fonctions 'find_dir', 'open_dir', 'get_name_info', 'get_date_format'
+    1.4.3 Amelioration des fonctions d'import de maya, jaz et close_date pour fonctionner avec les donnees d'archimono.
+    1.4.2 La fonction 'graph' peut desormais avoir 2 variables pour le parametre 'z'. La fonction 'make_output' supporte le format svg.
+    1.4.1 Ajout de 'verbose' dans close_date et import_caribu. Ajout de 'opt' en argument de graph.
+    1.4.0 Ajout des fonctions d'import des sorties de l-egume: legume_import, legume_lmax_by_rank, legume_import_toto, legume_import_lsAxes, legume_import_compare, import_caribu
+    1.3.0 Ajout des fonctions de rayonnement: alpha_calc, caribu_data, caribu_zeta, close_date, read_jaz, read_maya, read_siclex.
+    1.2.0 Ajout des fonctions de filtre de couleur: filter_angle, filter_green, filter_yellow; ajout de read_marscope.
 License: CC0
 Encoding: UTF-8
 LazyData: true
-Imports: Rmisc, pals, graphics, stats, grDevices, ggplot2, car,
-        agricolae, multcomp, png, rsm
-RoxygenNote: 7.1.1
+Imports: Rmisc, pals, graphics, stats, grDevices, ggplot2, car, agricolae, multcomp, png, rsm, EBImage, hydroGOF, stringr, methods, Rfast, REdaS, fmsb, plyr, readxl, rstudioapi
+RoxygenNote: 7.2.1
 NeedsCompilation: no
-Packaged: 2020-05-10 00:13:02 UTC; Arthur
+Packaged: 2021-05-05 10:00:00 UTC; Arthur

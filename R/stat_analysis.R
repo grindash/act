@@ -20,8 +20,9 @@
 #' @import agricolae
 #' @import multcomp
 #'
-#' @examples data("CO2")
-#' @examples stat_analysis(CO2, "uptake", c("Treatment", "Type"))
+#' @examples 
+#' data("CO2")
+#' stat_analysis(CO2, "uptake", c("Treatment", "Type"))
 stat_analysis <- function(data, Y, factors, sep = NULL, test = c(1:4), mfrow = NULL, SavePath = NULL, l = F, eb = F){
   options(warn = 1)
   if (length(sep) == 0) {
@@ -68,7 +69,7 @@ stat_analysis <- function(data, Y, factors, sep = NULL, test = c(1:4), mfrow = N
       if (length(SavePath > 0)) {
         dir.create(file.path(SavePath, "TukeyHSD", Y), recursive = T, showWarnings = F)
         pdf(file.path(SavePath, "TukeyHSD", Y, paste0("TukeyHSD ", param, ".pdf")), 15, 7)
-      } else windows(record = T)
+      }
       aov_modele <- aov(lm(as.formula(paste(Y, " ~ ", paste(factors, collapse = " * "))), data = df)) #meme modele qu'avec lm, aov est mieux gere par agricolae
       comp_hsd <- stats::TukeyHSD(aov_modele)
       par(oma = c(0, 25, 0, 0))
@@ -82,8 +83,7 @@ stat_analysis <- function(data, Y, factors, sep = NULL, test = c(1:4), mfrow = N
         if (length(mfrow) == 0) mfrow <- act::act_mfrow(factors, 1) else mfrow <- mfrow
         dir.create(file.path(SavePath, "BarGroup HSD", Y), recursive = T, showWarnings = F)
         png(file.path(SavePath, "BarGroup HSD", Y, paste0("BarGroup HSD ", param, ".png")), 5 * mfrow[2], 3.5 * mfrow[1], res = 400, units = "in")
-        par(mar = c(3, 5, 3, 0))
-        par(mfrow = mfrow)
+        par(mar = c(3, 5, 3, 0), mfrow = mfrow)
       } else if (length(mfrow) != 0) par(mfrow = mfrow)
 
       aov_modele <- aov(lm(as.formula(paste(Y, " ~ ", paste(factors, collapse = " * "))), data = df)) #même modele qu'avec lm, aov est mieux gere par agricolae
@@ -117,35 +117,47 @@ stat_analysis <- function(data, Y, factors, sep = NULL, test = c(1:4), mfrow = N
       cat("\tBoxplot ANOVA2\n")
       if (length(factors) > 1) {
         for (comb in seq_len(ncol(combn(factors, 2)))) {
-          if (length(SavePath > 0)) {
+          if (!is.null(SavePath)) {
             dir.create(file.path(SavePath, "ANOVA2", Y), recursive = T, showWarnings = F)
             png(file.path(SavePath, "ANOVA2", Y, paste0("Boxplot ANOVA2 ", param, " ", paste(combn(factors, 2)[, comb], collapse = " "), ".png")), 10, 7, res = 400, units = "in")
-            par(mfrow = mfrow)
           }
+          if (conditions == 1 & comb == 1) par(mfrow = mfrow)
 
-          df$comb_fac <- as.factor(paste(df[, combn(factors, 2)[1, comb]], df[, combn(factors, 2)[2, comb]], sep = "_"))
+          
+          #plot
+          plot_color <- act::shades_of_grey(length(levels(df[, combn(factors, 2)[1, comb]])))
+          plot <- (ggplot2::ggplot(df, ggplot2::aes(x = df[, combn(factors, 2)[2, comb]], y = df[, Y],  fill = df[, combn(factors, 2)[1, comb]])) +
+                    ggplot2::geom_boxplot(alpha = 0.5) +
+                    ggplot2::scale_colour_manual(values = plot_color) +
+                    ggplot2::scale_fill_manual(values = plot_color) +
+                    ggplot2::labs(title = list_sep[conditions, ], x = combn(factors, 2)[2, comb], y = Y, fill = combn(factors, 2)[1, comb]) +
+                    ggplot2::theme_classic()
+          )
+          
+          #symboles significatifs
+          myletters_df <- data.frame(letters = "")
+          try({
+          df$comb_fac <- as.factor(paste(gsub("_", "", df[, combn(factors, 2)[1, comb]]), gsub("_", "", df[, combn(factors, 2)[2, comb]]), sep = "_"))
           options(warn = -1)
           mc_tukey <- multcomp::glht(lm(df[, Y] ~ comb_fac, data = df), linfct = multcomp::mcp(comb_fac = "Tukey"))
           tuk_cld <- multcomp::cld(mc_tukey)
-          print(tuk_cld)
-          stop()
           options(warn = 1)
-          myletters_df <- data.frame(Echelle = t(as.data.frame(strsplit(levels(df$comb_fac), "_")))[, 2], densite = t(as.data.frame(strsplit(levels(df$comb_fac), "_")))[, 1], letters = tuk_cld$mcletters$Letters)
+          myletters_df <- data.frame(Echelle = t(as.data.frame(strsplit(levels(df$comb_fac), "_")))[, 2],
+                                     densite = t(as.data.frame(strsplit(levels(df$comb_fac), "_")))[, 1],
+                                     letters = tuk_cld$mcletters$Letters)
           if (length(grep("plt.m-2", myletters_df$densite)) > 0) myletters_df$densite <- relevel(myletters_df$densite, "11plt.m-2")
           myletters_df <- myletters_df[order(myletters_df[, 1], myletters_df[, 2]), ]
-
-          plot <- (ggplot2::ggplot(df, ggplot2::aes(x = df[, combn(factors, 2)[2, comb]], y = df[, Y],  fill = df[, combn(factors, 2)[1, comb]])) +
-                    ggplot2::geom_boxplot(alpha = 0.5) +
-                    ggplot2::scale_colour_manual(values = act::shades_of_grey(length(levels(df[, combn(factors, 2)[1, comb]])))) +
-                    ggplot2::scale_fill_manual(values = act::shades_of_grey(length(levels(df[, combn(factors, 2)[1, comb]])))) +
-                    ggplot2::labs(x = combn(factors, 2)[2, comb], y = Y, fill = combn(factors, 2)[1, comb]) +
-                    ggplot2::theme_classic()
-          )
-          plot <- plot + ggplot2::annotate("text", x = ggplot2::ggplot_build(plot)$data[[1]]$x, y = max(df[, Y]) * 1.05, label = as.character(myletters_df$letters)) +
-                         ggplot2::annotate("text", x = ggplot2::ggplot_build(plot)$data[[1]]$x, y = max(df[, Y]) * 1.05, label = as.character(myletters_df$letters))
+          })
+          myletters_df <- as.character(myletters_df$letters)
+          
+          
+          ggdf <- ggplot2::ggplot_build(plot)$data[[1]]
+          fact2_name <- levels(df[, combn(factors, 2)[1, comb]])[sapply(ggdf$fill, function(x) grep(x, plot_color))]
+          plot <- plot + ggplot2::annotate("text", x = ggdf$x, y = ggdf$ymax + max(df[, Y]) * .05, label = myletters_df) +
+          if (length(grep(T, ggdf$ymin == ggdf$ymax)) > 0) ggplot2::annotate("text", x = ggdf$x, y = max(df[, Y]) * 1.05, label = fact2_name)
 
           #Multiple plot with ggplot2
-          ggplot_print(plot)
+          act::ggplot_print(plot)
           if (length(SavePath > 0)) graphics.off()
         }
       } else warning("ANOVA2 cannot be run, only 1 factor given")

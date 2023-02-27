@@ -6,7 +6,7 @@
 #' @return Hex color value
 #' @export
 #'
-#' @importFrom grDevices colorRampPalette
+#' @import grDevices
 #' @examples shades_of_grey(3)
 shades_of_grey <- function(n) {
   if (n == 1) rep <- 2 else rep <- 1
